@@ -11,8 +11,8 @@ services:
       - stats-db
      environment:
        - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/statistic_ewm
-       - SPRING_DATASOURCE_USERNAME=root # POSTGRES_USER=root
-       - SPRING_DATASOURCE_PASSWORD=root #POSTGRES_PASSWORD=root
+       - SPRING_DATASOURCE_USERNAME=root
+       - SPRING_DATASOURCE_PASSWORD=root
        - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
 
 
@@ -36,10 +36,10 @@ services:
       - "8080:8080"
       - "5006:5005"
     depends_on:
-      - ewm-db
       - stats-server
+      - ewm-db
     environment:
-      - STATS_SERVER_URL=http://localhost:9090
+      - STATS_SERVER_URL=http://stats-server:9090
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root

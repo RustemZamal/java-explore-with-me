@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.practicum.client.webClient.StatisticsClient;
+import ru.practicum.client.stats_client.StatisticsClient;
 import ru.practicum.common.model.ViewStats;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StatsService {
 
-    private final StatisticsClient statisticsClientWebClient;
+    private final StatisticsClient statisticsClient;
 
     @Value("${app.name}")
     private String appName;
@@ -26,11 +26,11 @@ public class StatsService {
 
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
 
-        ResponseEntity<Object> stats = statisticsClientWebClient.getStats(start, end, uris, unique);
+        ResponseEntity<Object> stats = statisticsClient.getStats(start, end, uris, unique);
         return mapper.convertValue(stats.getBody(), new TypeReference<>() {});
     }
 
     public void addHit(HttpServletRequest request) {
-        statisticsClientWebClient.addHit(appName,request.getRemoteAddr(), request.getRequestURI(), LocalDateTime.now());
+        statisticsClient.addHit(appName,request.getRemoteAddr(), request.getRequestURI(), LocalDateTime.now());
     }
 }

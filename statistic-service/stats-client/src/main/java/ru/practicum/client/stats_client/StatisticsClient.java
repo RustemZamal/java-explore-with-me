@@ -1,4 +1,4 @@
-package ru.practicum.client.webClient;
+package ru.practicum.client.stats_client;
 
 import org.springframework.http.ResponseEntity;
 

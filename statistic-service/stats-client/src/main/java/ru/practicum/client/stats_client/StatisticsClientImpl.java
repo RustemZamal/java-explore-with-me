@@ -1,4 +1,4 @@
-package ru.practicum.client.webClient;
+package ru.practicum.client.stats_client;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -89,10 +89,10 @@ public class StatisticsClientImpl implements StatisticsClient {
     private <T> ResponseEntity<Object> executeRequest(HttpMethod method, Function<UriBuilder, URI> uriFunction, T requestBody, Class<Object> responseType) {
         return webClient.method(method)
                 .uri(uriFunction)
-                .headers(headers -> {
-                    headers.setContentType(MediaType.APPLICATION_JSON);
-                    headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-                })
+//                .headers(headers -> {
+//                    headers.setContentType(MediaType.APPLICATION_JSON);
+//                    headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+//                })
                 .body(requestBody != null ? BodyInserters.fromValue(requestBody) : BodyInserters.empty())
                 .exchangeToMono(response -> {
                     if (response.statusCode().is2xxSuccessful()) {
