@@ -27,7 +27,7 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-        if (end.isBefore(start)) {
+        if (start.isAfter(end)) {
             throw new IllegalArgumentException(String
                     .format("Invalid time interval, the start=%s cannot be later than end=%s", start, end));
         }

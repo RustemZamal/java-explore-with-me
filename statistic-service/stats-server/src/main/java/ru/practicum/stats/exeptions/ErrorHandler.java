@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,37 +25,46 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleIllegalArgumentException(final IllegalArgumentException ex, final WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(final IllegalArgumentException ex, final WebRequest request) {
         String path = request.getDescription(false).substring(4);
-        log.error("[INVALID DATA]: In: {}. Path: {}; Message: {}.", getClassAndMethodName(ex.getStackTrace()), path, ex.getMessage());
+        log.error("[INVALID DATA]: In: {}. Path: {}; Message: {}.", getClassAndMethodName(ex.getStackTrace()), path, ex);
 
-        return new ErrorResponse(
+     ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now().toString(),
                 HttpStatus.BAD_REQUEST.value(),
                 path,
                 ex.getMessage()
         );
+
+
+     return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("X-Error-Class", ex.getClass().getSimpleName()).body(error);
+
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMissingRequestParamException(
+    public ResponseEntity<ErrorResponse> handleMissingRequestParamException(
             final MissingServletRequestParameterException ex,
             final WebRequest request)  {
         String path = request.getDescription(false).substring(4);
-        log.error("[REQUEST PRAM ERROR]: In: {}. Path: {}; Message: {}.", getClassAndMethodName(ex.getStackTrace()), path, ex.getMessage());
+        log.error("[REQUEST PRAM ERROR]: In: {}. Path: {}; Message: {}.", getClassAndMethodName(ex.getStackTrace()), path, ex);
 
-        return new ErrorResponse(
+       ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now().toString(),
                 HttpStatus.BAD_REQUEST.value(),
                 path,
                 ex.getMessage()
         );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("X-Error-Class", ex.getClass().getSimpleName()).body(error);
+
+
+
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMethodArgumentNotValidException(
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
             final MethodArgumentNotValidException ex,
             final WebRequest request) {
         String errors = ex.getBindingResult().getAllErrors()
@@ -62,28 +72,34 @@ public class ErrorHandler {
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.joining(" "));
         String path = request.getDescription(false).substring(4);
-        log.error("[VALIDATION ERROR]: Path: {}; Message: {}.", path, ex.getMessage());
+        log.error("[VALIDATION ERROR]: Path: {}; Message: {}.", path, ex);
 
-        return new ErrorResponse(
+        ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now().format(StatsUtil.DATE_TIME_FORMATTER),
                 HttpStatus.BAD_REQUEST.value(),
                 path,
                 errors
         );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("X-Error-Class", ex.getClass().getSimpleName()).body(error);
+
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleThrowable(final Throwable ex, final WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleThrowable(final Throwable ex, final WebRequest request) {
 
         String path = request.getDescription(false).substring(4);
-        log.error("[INTERNAL SERVER ERROR]: Path: {}: Message: {}", path, ex.getMessage());
-        return new ErrorResponse(
+        log.error("[INTERNAL SERVER ERROR]: Path: {}: Message: {}", path, ex);
+       ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now().toString(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 path,
                 ex.getMessage()
         );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("X-Error-Class", ex.getClass().getSimpleName()).body(error);
+
     }
 
     private String getClassAndMethodName(StackTraceElement[] stackTrace) {
