@@ -4,19 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import ru.practicum.main.event.enums.RequestStatus;
 
 import java.util.List;
 
-@Builder
 @Getter
-@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventRequestStatusUpdateRequest {
+public class EventRequestStatusResult {
 
-    private List<Long> requestIds;
+    private List<ParticipationRequestDto> confirmedRequests;
 
-    private RequestStatus status;
+    private List<ParticipationRequestDto> rejectedRequests;
+
 }

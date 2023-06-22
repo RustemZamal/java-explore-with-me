@@ -1,7 +1,7 @@
 package ru.practicum.main.event.service;
 
-import ru.practicum.main.event.dto.EventRequestStatusUpdateRequest;
-import ru.practicum.main.event.dto.EventRequestStatusUpdateResult;
+import ru.practicum.main.event.dto.EventRequestStatusRequest;
+import ru.practicum.main.event.dto.EventRequestStatusResult;
 import ru.practicum.main.event.dto.ParticipationRequestDto;
 
 import java.util.List;
@@ -16,8 +16,8 @@ public interface RequestService {
 
     List<ParticipationRequestDto> getEventRequestsByEventOwner(Long userId, Long eventId);
 
-    EventRequestStatusUpdateResult patchEventRequestByEventOwner(
-            EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest,
+    EventRequestStatusResult patchEventRequestByEventOwner(
+            EventRequestStatusRequest eventRequestStatusRequest,
             Long userId,
             Long eventId);
 }

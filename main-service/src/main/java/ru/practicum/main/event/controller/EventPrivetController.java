@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.main.event.dto.EventFullDto;
-import ru.practicum.main.event.dto.EventRequestStatusUpdateRequest;
-import ru.practicum.main.event.dto.EventRequestStatusUpdateResult;
+import ru.practicum.main.event.dto.EventRequestStatusRequest;
+import ru.practicum.main.event.dto.EventRequestStatusResult;
 import ru.practicum.main.event.dto.EventShortDto;
 import ru.practicum.main.event.dto.NewEventDto;
 import ru.practicum.main.event.dto.ParticipationRequestDto;
@@ -73,10 +73,10 @@ public class EventPrivetController {
 
     @PatchMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public EventRequestStatusUpdateResult patchEventRequest(
-            @RequestBody EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest,
+    public EventRequestStatusResult patchEventRequest(
+            @RequestBody EventRequestStatusRequest eventRequestStatusRequest,
             @PathVariable Long userId,
             @PathVariable Long eventId) {
-        return requestService.patchEventRequestByEventOwner(eventRequestStatusUpdateRequest, userId, eventId);
+        return requestService.patchEventRequestByEventOwner(eventRequestStatusRequest, userId, eventId);
     }
 }

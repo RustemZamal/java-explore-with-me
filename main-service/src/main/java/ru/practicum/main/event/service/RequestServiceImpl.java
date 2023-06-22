@@ -3,8 +3,8 @@ package ru.practicum.main.event.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.main.event.dto.EventRequestStatusUpdateRequest;
-import ru.practicum.main.event.dto.EventRequestStatusUpdateResult;
+import ru.practicum.main.event.dto.EventRequestStatusRequest;
+import ru.practicum.main.event.dto.EventRequestStatusResult;
 import ru.practicum.main.event.dto.ParticipationRequestDto;
 import ru.practicum.main.event.enums.EventState;
 import ru.practicum.main.event.enums.RequestStatus;
@@ -109,8 +109,8 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     @Transactional
-    public EventRequestStatusUpdateResult patchEventRequestByEventOwner(
-            EventRequestStatusUpdateRequest eventRequest,
+    public EventRequestStatusResult patchEventRequestByEventOwner(
+            EventRequestStatusRequest eventRequest,
             Long userId, Long eventId) {
 
         userService.getUserById(userId);
@@ -122,7 +122,7 @@ public class RequestServiceImpl implements RequestService {
         }
 
         if (event.getParticipantLimit() == 0 || !event.isRequestModeration() || eventRequest.getRequestIds().isEmpty()) {
-            return new EventRequestStatusUpdateResult(List.of(), List.of());
+            return new EventRequestStatusResult(List.of(), List.of());
         }
 
         if (event.getConfirmedRequests() >= event.getParticipantLimit()) {
@@ -142,7 +142,7 @@ public class RequestServiceImpl implements RequestService {
 
         if (RequestStatus.REJECTED.equals(eventRequest.getStatus())) {
             requests.forEach(request -> request.setStatus(RequestStatus.REJECTED));
-            return new EventRequestStatusUpdateResult(
+            return new EventRequestStatusResult(
                     RequestMapper.toParticipationRequestDto(confirmedList),
                     RequestMapper.toParticipationRequestDto(requestRepository.saveAll(requests)));
         }
@@ -164,7 +164,7 @@ public class RequestServiceImpl implements RequestService {
         event.setConfirmedRequests(event.getConfirmedRequests() + confirmedList.size());
         eventRepository.save(event);
 
-        return new EventRequestStatusUpdateResult(
+        return new EventRequestStatusResult(
                 RequestMapper.toParticipationRequestDto(confirmedList),
                 RequestMapper.toParticipationRequestDto(rejectedList));
     }
