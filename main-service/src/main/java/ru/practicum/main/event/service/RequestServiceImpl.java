@@ -88,16 +88,21 @@ public class RequestServiceImpl implements RequestService {
                     "User with id=%d cannot cancel request with id=%d as he/she didn't apply fot the event.", userId, requestId));
         }
 
-        request.setStatus(RequestStatus.CANCELED);
         Event event = eventService.getEventById(request.getEvent().getId());
-        event.setConfirmedRequests(event.getConfirmedRequests() - 1);
-        eventRepository.save(event);
+        if (request.getStatus().equals(RequestStatus.CONFIRMED)) {
+            event.setConfirmedRequests(event.getConfirmedRequests() - 1);
+            eventRepository.save(event);
+        }
+
+        request.setStatus(RequestStatus.CANCELED);
+
         return RequestMapper.toParticipationRequestDto(requestRepository.save(request));
     }
 
     @Override
     public List<ParticipationRequestDto> getEventRequestsByEventOwner(Long userId, Long eventId) {
         userService.getUserById(userId);
+
         List<Request> requests = requestRepository.findAllByEventAndOwner(userId, eventId);
         return RequestMapper.toParticipationRequestDto(requests);
     }
@@ -163,7 +168,6 @@ public class RequestServiceImpl implements RequestService {
                 RequestMapper.toParticipationRequestDto(confirmedList),
                 RequestMapper.toParticipationRequestDto(rejectedList));
     }
-
 
     private Request createRequest(User user, Event event) {
         return Request.builder()

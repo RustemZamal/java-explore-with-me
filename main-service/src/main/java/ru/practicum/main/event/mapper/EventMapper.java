@@ -88,7 +88,7 @@ public class EventMapper {
                 .paid(event.isPaid())
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toCategoryDto(event.getCategory()))
-                .confirmedRequests(event.getRequests().size())
+                .confirmedRequests(event.getConfirmedRequests())
                 .views(views)
                 .initiator(UserMapper.tUserShortDto(event.getInitiator()))
                 .build();

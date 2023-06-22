@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.main.user.dto.NewUserRequest;
 import ru.practicum.main.user.dto.UserDto;
 import ru.practicum.main.user.service.UserService;
-import ru.practicum.main.util.OffsetPageRequest;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -32,7 +31,7 @@ public class UserAdminController {
             @RequestParam(required = false) List<Long> ids,
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "10") int size) {
-        return userService.getAllUsersViaAdmin(ids, new OffsetPageRequest(from, size));
+        return userService.getAllUsersViaAdmin(ids, from, size);
     }
 
     @PostMapping

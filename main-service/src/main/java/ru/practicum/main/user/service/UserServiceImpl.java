@@ -1,7 +1,7 @@
 package ru.practicum.main.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main.exeption.NotFoundException;
@@ -10,6 +10,7 @@ import ru.practicum.main.user.dto.UserDto;
 import ru.practicum.main.user.mapper.UserMapper;
 import ru.practicum.main.user.model.User;
 import ru.practicum.main.user.repository.UserRepository;
+import ru.practicum.main.util.OffsetPageRequest;
 
 import java.util.List;
 
@@ -28,12 +29,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsersViaAdmin(List<Long> ids, Pageable pageable) {
+    public List<UserDto> getAllUsersViaAdmin(List<Long> ids, int from, int size) {
         if (ids == null || ids.isEmpty()) {
-            return UserMapper.toUserDto(userRepository.findAll(pageable));
+            return UserMapper.toUserDto(userRepository.findAll(new OffsetPageRequest(from, size)));
         }
 
-        return UserMapper.toUserDto(userRepository.findAllByIdIn(ids, pageable));
+        return UserMapper.toUserDto(userRepository.findAllByIdIn(
+                ids, new OffsetPageRequest(from, size, Sort.by("id").descending())));
     }
 
     @Override
