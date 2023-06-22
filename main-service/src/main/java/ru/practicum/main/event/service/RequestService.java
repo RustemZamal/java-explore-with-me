@@ -1,6 +1,6 @@
 package ru.practicum.main.event.service;
 
-import ru.practicum.main.event.dto.EventRequestStatusRequest;
+import ru.practicum.main.event.dto.EventRequestStatus;
 import ru.practicum.main.event.dto.EventRequestStatusResult;
 import ru.practicum.main.event.dto.ParticipationRequestDto;
 
@@ -17,7 +17,7 @@ public interface RequestService {
     List<ParticipationRequestDto> getEventRequestsByEventOwner(Long userId, Long eventId);
 
     EventRequestStatusResult patchEventRequestByEventOwner(
-            EventRequestStatusRequest eventRequestStatusRequest,
+            EventRequestStatus eventRequestStatus,
             Long userId,
             Long eventId);
 }

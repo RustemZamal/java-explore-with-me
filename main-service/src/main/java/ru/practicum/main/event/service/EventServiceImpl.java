@@ -15,7 +15,7 @@ import ru.practicum.main.event.dto.EventRequest;
 import ru.practicum.main.event.dto.LocationDto;
 import ru.practicum.main.event.dto.NewEventDto;
 import ru.practicum.main.event.dto.EventAdminRequestDto;
-import ru.practicum.main.event.dto.EventUserRequesDto;
+import ru.practicum.main.event.dto.EventUserRequestDto;
 import ru.practicum.main.event.enums.EventSortType;
 import ru.practicum.main.event.enums.EventState;
 import ru.practicum.main.event.enums.EventStateAction;
@@ -162,8 +162,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventFullDto patchEventViaPrivet(EventUserRequesDto eventUserRequesDto, Long userId, Long eventId) {
-        checkNewEventDate(eventUserRequesDto.getEventDate(), LocalDateTime.now().plusHours(2));
+    public EventFullDto patchEventViaPrivet(EventUserRequestDto eventUserRequestDto, Long userId, Long eventId) {
+        checkNewEventDate(eventUserRequestDto.getEventDate(), LocalDateTime.now().plusHours(2));
 
         Event event = getEventById(eventId);
         userService.getUserById(userId);
@@ -172,46 +172,46 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("Only pending or canceled events can be changed");
         }
 
-        if (eventUserRequesDto.getAnnotation() != null) {
-            event.setAnnotation(eventUserRequesDto.getAnnotation());
+        if (eventUserRequestDto.getAnnotation() != null) {
+            event.setAnnotation(eventUserRequestDto.getAnnotation());
         }
 
-        if (eventUserRequesDto.getCategory() != null) {
-            event.setCategory(categoryService.getCategoryById(eventUserRequesDto.getCategory()));
+        if (eventUserRequestDto.getCategory() != null) {
+            event.setCategory(categoryService.getCategoryById(eventUserRequestDto.getCategory()));
         }
 
-        if (eventUserRequesDto.getDescription() != null) {
-            event.setDescription(eventUserRequesDto.getDescription());
+        if (eventUserRequestDto.getDescription() != null) {
+            event.setDescription(eventUserRequestDto.getDescription());
         }
 
-        if (eventUserRequesDto.getEventDate() != null) {
-            event.setEventDate(eventUserRequesDto.getEventDate());
+        if (eventUserRequestDto.getEventDate() != null) {
+            event.setEventDate(eventUserRequestDto.getEventDate());
         }
 
-        if (eventUserRequesDto.getLocation() != null) {
-            event.setLocation(getOrSaveLocation(eventUserRequesDto.getLocation()));
+        if (eventUserRequestDto.getLocation() != null) {
+            event.setLocation(getOrSaveLocation(eventUserRequestDto.getLocation()));
         }
 
-        if (eventUserRequesDto.getParticipantLimit() != null) {
-            event.setParticipantLimit(eventUserRequesDto.getParticipantLimit());
+        if (eventUserRequestDto.getParticipantLimit() != null) {
+            event.setParticipantLimit(eventUserRequestDto.getParticipantLimit());
         }
 
-        if (eventUserRequesDto.getPaid() != null) {
-            event.setPaid(eventUserRequesDto.getPaid());
+        if (eventUserRequestDto.getPaid() != null) {
+            event.setPaid(eventUserRequestDto.getPaid());
         }
 
-        if (eventUserRequesDto.getRequestModeration() != null) {
-            event.setRequestModeration(eventUserRequesDto.getRequestModeration());
+        if (eventUserRequestDto.getRequestModeration() != null) {
+            event.setRequestModeration(eventUserRequestDto.getRequestModeration());
         }
 
-        if (eventUserRequesDto.getTitle() != null) {
-            event.setTitle(eventUserRequesDto.getTitle());
+        if (eventUserRequestDto.getTitle() != null) {
+            event.setTitle(eventUserRequestDto.getTitle());
         }
 
-        if (eventUserRequesDto.getStateAction() != null) {
-            if (EventStateAction.SEND_TO_REVIEW.equals(eventUserRequesDto.getStateAction())) {
+        if (eventUserRequestDto.getStateAction() != null) {
+            if (EventStateAction.SEND_TO_REVIEW.equals(eventUserRequestDto.getStateAction())) {
                 event.setState(EventState.PENDING);
-            } else if (EventStateAction.CANCEL_REVIEW.equals(eventUserRequesDto.getStateAction())) {
+            } else if (EventStateAction.CANCEL_REVIEW.equals(eventUserRequestDto.getStateAction())) {
                 event.setState(EventState.CANCELED);
             }
         }

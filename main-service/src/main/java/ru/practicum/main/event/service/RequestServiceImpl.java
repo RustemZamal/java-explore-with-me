@@ -3,7 +3,7 @@ package ru.practicum.main.event.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.main.event.dto.EventRequestStatusRequest;
+import ru.practicum.main.event.dto.EventRequestStatus;
 import ru.practicum.main.event.dto.EventRequestStatusResult;
 import ru.practicum.main.event.dto.ParticipationRequestDto;
 import ru.practicum.main.event.enums.EventState;
@@ -110,7 +110,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     @Transactional
     public EventRequestStatusResult patchEventRequestByEventOwner(
-            EventRequestStatusRequest eventRequest,
+            EventRequestStatus eventRequest,
             Long userId, Long eventId) {
 
         userService.getUserById(userId);

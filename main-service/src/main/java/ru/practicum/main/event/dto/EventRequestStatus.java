@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventRequestStatusRequest {
+public class EventRequestStatus {
 
     private List<Long> requestIds;
 

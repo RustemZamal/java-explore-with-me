@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main.compilation.dto.CompilationDto;
 import ru.practicum.main.compilation.dto.NewCompilationDto;
-import ru.practicum.main.compilation.dto.UpdateCompilationRequest;
+import ru.practicum.main.compilation.dto.CompilationRequest;
 import ru.practicum.main.compilation.mapper.CompilationMapper;
 import ru.practicum.main.compilation.model.Compilation;
 import ru.practicum.main.compilation.repository.CompilationRepository;
@@ -48,25 +48,25 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     @Transactional
-    public CompilationDto patchCompilationViaAdmin(UpdateCompilationRequest updateCompilationRequest, Long compId) {
+    public CompilationDto patchCompilationViaAdmin(CompilationRequest compilationRequest, Long compId) {
         Compilation compilation = getCompilationById(compId);
 
-        if (updateCompilationRequest.getPinned() != null) {
-            compilation.setPinned(updateCompilationRequest.getPinned());
+        if (compilationRequest.getPinned() != null) {
+            compilation.setPinned(compilationRequest.getPinned());
         }
 
-        if (updateCompilationRequest.getTitle() != null) {
-            compilation.setTitle(updateCompilationRequest.getTitle());
+        if (compilationRequest.getTitle() != null) {
+            compilation.setTitle(compilationRequest.getTitle());
         }
 
-        if (updateCompilationRequest.getEvents() != null) {
-            List<Event> events = eventService.getEventsByIds(updateCompilationRequest.getEvents());
+        if (compilationRequest.getEvents() != null) {
+            List<Event> events = eventService.getEventsByIds(compilationRequest.getEvents());
             compilation.setEvents(events);
         }
 
         Compilation savedComp = compilationRepository.save(compilation);
 
-        return toCompilationDto(updateCompilationRequest.getEvents(), savedComp);
+        return toCompilationDto(compilationRequest.getEvents(), savedComp);
     }
 
     @Override

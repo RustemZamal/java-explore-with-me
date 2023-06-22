@@ -6,7 +6,7 @@ import ru.practicum.main.event.dto.EventShortDto;
 import ru.practicum.main.event.dto.EventRequest;
 import ru.practicum.main.event.dto.NewEventDto;
 import ru.practicum.main.event.dto.EventAdminRequestDto;
-import ru.practicum.main.event.dto.EventUserRequesDto;
+import ru.practicum.main.event.dto.EventUserRequestDto;
 import ru.practicum.main.event.model.Event;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +31,7 @@ public interface EventService {
     List<EventFullDto> getEventsViaAdmin(EventRequest.AdminRequest adminReq);
 
     EventFullDto patchEventViaPrivet(
-            EventUserRequesDto eventUserRequesDto,
+            EventUserRequestDto eventUserRequestDto,
             Long userId,
             Long eventId);
 

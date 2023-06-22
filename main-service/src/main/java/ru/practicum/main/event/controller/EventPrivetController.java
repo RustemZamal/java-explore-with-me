@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.main.event.dto.EventFullDto;
-import ru.practicum.main.event.dto.EventRequestStatusRequest;
+import ru.practicum.main.event.dto.EventRequestStatus;
 import ru.practicum.main.event.dto.EventRequestStatusResult;
 import ru.practicum.main.event.dto.EventShortDto;
 import ru.practicum.main.event.dto.NewEventDto;
 import ru.practicum.main.event.dto.ParticipationRequestDto;
-import ru.practicum.main.event.dto.EventUserRequesDto;
+import ru.practicum.main.event.dto.EventUserRequestDto;
 import ru.practicum.main.event.service.EventService;
 import ru.practicum.main.event.service.RequestService;
 import ru.practicum.main.util.OffsetPageRequest;
@@ -59,10 +59,10 @@ public class EventPrivetController {
     @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto patchEventViaPrivet(
-            @RequestBody @Valid EventUserRequesDto eventUserRequesDto,
+            @RequestBody @Valid EventUserRequestDto eventUserRequestDto,
             @PathVariable Long userId,
             @PathVariable Long eventId) {
-        return eventService.patchEventViaPrivet(eventUserRequesDto, userId, eventId);
+        return eventService.patchEventViaPrivet(eventUserRequestDto, userId, eventId);
     }
 
     @GetMapping("/{eventId}/requests")
@@ -74,9 +74,9 @@ public class EventPrivetController {
     @PatchMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
     public EventRequestStatusResult patchEventRequest(
-            @RequestBody EventRequestStatusRequest eventRequestStatusRequest,
+            @RequestBody EventRequestStatus eventRequestStatus,
             @PathVariable Long userId,
             @PathVariable Long eventId) {
-        return requestService.patchEventRequestByEventOwner(eventRequestStatusRequest, userId, eventId);
+        return requestService.patchEventRequestByEventOwner(eventRequestStatus, userId, eventId);
     }
 }

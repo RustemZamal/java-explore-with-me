@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.main.compilation.dto.CompilationDto;
 import ru.practicum.main.compilation.dto.NewCompilationDto;
-import ru.practicum.main.compilation.dto.UpdateCompilationRequest;
+import ru.practicum.main.compilation.dto.CompilationRequest;
 import ru.practicum.main.compilation.service.CompilationService;
 
 import javax.validation.Valid;
@@ -34,9 +34,9 @@ public class CompilationAdminController {
     @PatchMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
     public CompilationDto patchCompilationViaAdmin(
-            @Valid @RequestBody UpdateCompilationRequest updateCompilationRequest,
+            @Valid @RequestBody CompilationRequest compilationRequest,
             @PathVariable Long compId) {
-        return compilationService.patchCompilationViaAdmin(updateCompilationRequest, compId);
+        return compilationService.patchCompilationViaAdmin(compilationRequest, compId);
     }
 
     @DeleteMapping("/{compId}")

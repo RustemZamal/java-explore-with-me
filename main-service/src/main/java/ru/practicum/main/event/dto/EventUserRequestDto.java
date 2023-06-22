@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EventUserRequesDto {
+public class EventUserRequestDto {
 
     @Size(min = 20, max = 2000, message = "The annotation length must be at least 20 character and no more than 2000 characters")
     private String annotation;

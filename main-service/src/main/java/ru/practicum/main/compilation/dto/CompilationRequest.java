@@ -12,7 +12,7 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateCompilationRequest {
+public class CompilationRequest {
 
     private Set<Long> events;
 
