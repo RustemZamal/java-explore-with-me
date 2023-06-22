@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.main.event.dto.EventFullDto;
-import ru.practicum.main.event.dto.GetEventRequest;
-import ru.practicum.main.event.dto.UpdateEventAdminRequest;
+import ru.practicum.main.event.dto.EventRequest;
+import ru.practicum.main.event.dto.EventAdminRequestDto;
 import ru.practicum.main.event.enums.EventState;
 import ru.practicum.main.event.service.EventService;
 import ru.practicum.main.util.DTFormatter;
@@ -42,7 +42,7 @@ public class EventAdminController {
             @RequestParam(defaultValue = "10") @Min(1) int size) {
 
         return eventService.getEventsViaAdmin(
-                GetEventRequest.ofAdmin(
+                EventRequest.ofAdmin(
                         users,
                         states,
                         categories,
@@ -55,9 +55,9 @@ public class EventAdminController {
     @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto pathEventByAdmin(
-            @RequestBody @Valid UpdateEventAdminRequest updateEventAdminRequest,
+            @RequestBody @Valid EventAdminRequestDto eventAdminRequestDto,
             @PathVariable Long eventId) {
-        return eventService.pathEventViaAdmin(updateEventAdminRequest, eventId);
+        return eventService.pathEventViaAdmin(eventAdminRequestDto, eventId);
     }
 
 }

@@ -87,7 +87,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ErrorResponse> handleThrowable(final Throwable ex, final WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleExceptionError(final Exception ex, final WebRequest request) {
 
         String path = request.getDescription(false).substring(4);
         log.error("[INTERNAL SERVER ERROR]: Path: {}: Message: {}", path, ex);

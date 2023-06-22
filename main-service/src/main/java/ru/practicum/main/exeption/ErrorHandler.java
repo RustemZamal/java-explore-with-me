@@ -103,7 +103,7 @@ public class ErrorHandler {
         return new ApiError(
                 HttpStatus.CONFLICT.name(),
                 "Integrity constraint has been violated.",
-                ex.getCause().getMessage(), //Integrity constraint has been violated
+                ex.getCause().getMessage(),
                 getAsString(ex),
                 LocalDateTime.now().format(DTFormatter.DATE_TIME_FORMATTER)
         );
@@ -152,7 +152,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiError handleThrowable(final Throwable ex) {
+    public ApiError handleExceptionError(final Exception ex) {
         log.error("[INTERNAL SERVER ERROR]: {},", ex.getMessage(), ex);
         return new ApiError(
                 HttpStatus.INTERNAL_SERVER_ERROR.name(),
@@ -163,7 +163,7 @@ public class ErrorHandler {
         );
     }
 
-    private String getAsString(Throwable ex) {
+    private String getAsString(Exception ex) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         ex.printStackTrace(pw);

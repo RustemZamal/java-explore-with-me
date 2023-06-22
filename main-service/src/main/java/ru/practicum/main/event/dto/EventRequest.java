@@ -13,13 +13,13 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class GetEventRequest {
+public class EventRequest {
 
 
     private HttpServletRequest request;
     private String text;
     private List<Long> categories;
-    Boolean paid;
+    private Boolean paid;
     private LocalDateTime rangeStart;
     private LocalDateTime rangeEnd;
     private boolean onlyAvailable;
@@ -27,7 +27,7 @@ public class GetEventRequest {
     private Integer from;
     private Integer size;
 
-    public static GetEventRequest of(
+    public static EventRequest of(
             HttpServletRequest request,
             String text,
             List<Long> categories,
@@ -38,19 +38,19 @@ public class GetEventRequest {
             EventSortType sort,
             Integer from,
             Integer size) {
-        GetEventRequest getEventRequest = new GetEventRequest();
-        getEventRequest.setRequest(request);
-        getEventRequest.setFrom(from);
-        getEventRequest.setPaid(paid);
-        getEventRequest.setSize(size);
-        getEventRequest.setOnlyAvailable(onlyAvailable);
-        getEventRequest.setText(text);
-        getEventRequest.setRangeEnd(rangeEnd);
-        getEventRequest.setRangeStart(rangeStart);
-        getEventRequest.setCategories(categories);
-        getEventRequest.setSort(sort);
+        EventRequest eventRequest = new EventRequest();
+        eventRequest.setRequest(request);
+        eventRequest.setFrom(from);
+        eventRequest.setPaid(paid);
+        eventRequest.setSize(size);
+        eventRequest.setOnlyAvailable(onlyAvailable);
+        eventRequest.setText(text);
+        eventRequest.setRangeEnd(rangeEnd);
+        eventRequest.setRangeStart(rangeStart);
+        eventRequest.setCategories(categories);
+        eventRequest.setSort(sort);
 
-        return getEventRequest;
+        return eventRequest;
     }
 
     @Getter

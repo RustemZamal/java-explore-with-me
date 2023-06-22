@@ -3,10 +3,10 @@ package ru.practicum.main.event.service;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.main.event.dto.EventFullDto;
 import ru.practicum.main.event.dto.EventShortDto;
-import ru.practicum.main.event.dto.GetEventRequest;
+import ru.practicum.main.event.dto.EventRequest;
 import ru.practicum.main.event.dto.NewEventDto;
-import ru.practicum.main.event.dto.UpdateEventAdminRequest;
-import ru.practicum.main.event.dto.UpdateEventUserRequest;
+import ru.practicum.main.event.dto.EventAdminRequestDto;
+import ru.practicum.main.event.dto.EventUserRequesDto;
 import ru.practicum.main.event.model.Event;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ public interface EventService {
 
     Event getEventById(Long eventId);
 
-    Collection<EventShortDto> getAllEventsViaPublic(GetEventRequest req);
+    Collection<EventShortDto> getAllEventsViaPublic(EventRequest req);
 
     EventFullDto getEventByIdViaPublic(Long id, HttpServletRequest requestURI);
 
@@ -28,10 +28,10 @@ public interface EventService {
 
     List<Event> getEventsByIds(Set<Long> events);
 
-    List<EventFullDto> getEventsViaAdmin(GetEventRequest.AdminRequest adminReq);
+    List<EventFullDto> getEventsViaAdmin(EventRequest.AdminRequest adminReq);
 
     EventFullDto patchEventViaPrivet(
-            UpdateEventUserRequest updateEventUserRequest,
+            EventUserRequesDto eventUserRequesDto,
             Long userId,
             Long eventId);
 
@@ -39,7 +39,7 @@ public interface EventService {
 
     EventFullDto getEventByIdViaPrivet(Long userId, Long eventId);
 
-    EventFullDto pathEventViaAdmin(UpdateEventAdminRequest updateEventAdminRequest, Long eventId);
+    EventFullDto pathEventViaAdmin(EventAdminRequestDto eventAdminRequestDto, Long eventId);
 }
 
 

@@ -1,6 +1,7 @@
 package ru.practicum.main.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,14 +20,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UpdateEventAdminRequest {
+public class EventUserRequesDto {
 
     @Size(min = 20, max = 2000, message = "The annotation length must be at least 20 character and no more than 2000 characters")
     private String annotation;
 
     private Long category;
 
-    @Size(min = 20, max = 7000, message = "The description length must be at least 20 character and no more than 7000 characters")
+    @Size(min = 20, max = 7000,message = "The description length must be at least 20 character and no more than 7000 characters")
     private String description;
 
     @JsonFormat(pattern = DTFormatter.DT_FORMAT, shape = JsonFormat.Shape.STRING)

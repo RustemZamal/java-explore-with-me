@@ -17,7 +17,7 @@ import ru.practicum.main.event.dto.EventRequestStatusUpdateResult;
 import ru.practicum.main.event.dto.EventShortDto;
 import ru.practicum.main.event.dto.NewEventDto;
 import ru.practicum.main.event.dto.ParticipationRequestDto;
-import ru.practicum.main.event.dto.UpdateEventUserRequest;
+import ru.practicum.main.event.dto.EventUserRequesDto;
 import ru.practicum.main.event.service.EventService;
 import ru.practicum.main.event.service.RequestService;
 import ru.practicum.main.util.OffsetPageRequest;
@@ -59,10 +59,10 @@ public class EventPrivetController {
     @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto patchEventViaPrivet(
-            @RequestBody @Valid UpdateEventUserRequest updateEventUserRequest,
+            @RequestBody @Valid EventUserRequesDto eventUserRequesDto,
             @PathVariable Long userId,
             @PathVariable Long eventId) {
-        return eventService.patchEventViaPrivet(updateEventUserRequest, userId, eventId);
+        return eventService.patchEventViaPrivet(eventUserRequesDto, userId, eventId);
     }
 
     @GetMapping("/{eventId}/requests")

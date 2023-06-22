@@ -89,16 +89,12 @@ public class StatisticsClientImpl implements StatisticsClient {
     private <T> ResponseEntity<Object> executeRequest(HttpMethod method, Function<UriBuilder, URI> uriFunction, T requestBody, Class<Object> responseType) {
         return webClient.method(method)
                 .uri(uriFunction)
-//                .headers(headers -> {
-//                    headers.setContentType(MediaType.APPLICATION_JSON);
-//                    headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-//                })
                 .body(requestBody != null ? BodyInserters.fromValue(requestBody) : BodyInserters.empty())
                 .exchangeToMono(response -> {
                     if (response.statusCode().is2xxSuccessful()) {
                         return response.toEntity(responseType);
                     } else {
-                        return Mono.just(ResponseEntity.status(response.rawStatusCode()).body(response));
+                        return Mono.just(ResponseEntity.status(response.rawStatusCode()).body(response.toEntity(String.class)));
                     }
                 }).block();
     }

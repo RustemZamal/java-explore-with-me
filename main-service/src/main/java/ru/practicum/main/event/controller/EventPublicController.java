@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.main.event.dto.EventFullDto;
 import ru.practicum.main.event.dto.EventShortDto;
-import ru.practicum.main.event.dto.GetEventRequest;
+import ru.practicum.main.event.dto.EventRequest;
 import ru.practicum.main.event.enums.EventSortType;
 import ru.practicum.main.event.service.EventService;
 import ru.practicum.main.util.DTFormatter;
@@ -42,7 +42,7 @@ public class EventPublicController {
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request) {
         return eventService.getAllEventsViaPublic(
-                GetEventRequest.of(
+                EventRequest.of(
                         request,
                         text,
                         categories,

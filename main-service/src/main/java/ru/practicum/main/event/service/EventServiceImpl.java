@@ -11,11 +11,11 @@ import ru.practicum.main.category.model.Category;
 import ru.practicum.main.category.service.CategoryService;
 import ru.practicum.main.event.dto.EventFullDto;
 import ru.practicum.main.event.dto.EventShortDto;
-import ru.practicum.main.event.dto.GetEventRequest;
+import ru.practicum.main.event.dto.EventRequest;
 import ru.practicum.main.event.dto.LocationDto;
 import ru.practicum.main.event.dto.NewEventDto;
-import ru.practicum.main.event.dto.UpdateEventAdminRequest;
-import ru.practicum.main.event.dto.UpdateEventUserRequest;
+import ru.practicum.main.event.dto.EventAdminRequestDto;
+import ru.practicum.main.event.dto.EventUserRequesDto;
 import ru.practicum.main.event.enums.EventSortType;
 import ru.practicum.main.event.enums.EventState;
 import ru.practicum.main.event.enums.EventStateAction;
@@ -82,7 +82,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> getAllEventsViaPublic(GetEventRequest req) {
+    public List<EventShortDto> getAllEventsViaPublic(EventRequest req) {
         checkRangeTime(req.getRangeStart(), req.getRangeEnd());
 
         List<Event> events;
@@ -134,7 +134,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventFullDto> getEventsViaAdmin(GetEventRequest.AdminRequest req) {
+    public List<EventFullDto> getEventsViaAdmin(EventRequest.AdminRequest req) {
         checkRangeTime(req.getRangeStart(), req.getRangeEnd());
 
         List<Event> events;
@@ -162,8 +162,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventFullDto patchEventViaPrivet(UpdateEventUserRequest updateEventUserRequest, Long userId, Long eventId) {
-        checkNewEventDate(updateEventUserRequest.getEventDate(), LocalDateTime.now().plusHours(2));
+    public EventFullDto patchEventViaPrivet(EventUserRequesDto eventUserRequesDto, Long userId, Long eventId) {
+        checkNewEventDate(eventUserRequesDto.getEventDate(), LocalDateTime.now().plusHours(2));
 
         Event event = getEventById(eventId);
         userService.getUserById(userId);
@@ -172,46 +172,46 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("Only pending or canceled events can be changed");
         }
 
-        if (updateEventUserRequest.getAnnotation() != null) {
-            event.setAnnotation(updateEventUserRequest.getAnnotation());
+        if (eventUserRequesDto.getAnnotation() != null) {
+            event.setAnnotation(eventUserRequesDto.getAnnotation());
         }
 
-        if (updateEventUserRequest.getCategory() != null) {
-            event.setCategory(categoryService.getCategoryById(updateEventUserRequest.getCategory()));
+        if (eventUserRequesDto.getCategory() != null) {
+            event.setCategory(categoryService.getCategoryById(eventUserRequesDto.getCategory()));
         }
 
-        if (updateEventUserRequest.getDescription() != null) {
-            event.setDescription(updateEventUserRequest.getDescription());
+        if (eventUserRequesDto.getDescription() != null) {
+            event.setDescription(eventUserRequesDto.getDescription());
         }
 
-        if (updateEventUserRequest.getEventDate() != null) {
-            event.setEventDate(updateEventUserRequest.getEventDate());
+        if (eventUserRequesDto.getEventDate() != null) {
+            event.setEventDate(eventUserRequesDto.getEventDate());
         }
 
-        if (updateEventUserRequest.getLocation() != null) {
-            event.setLocation(getOrSaveLocation(updateEventUserRequest.getLocation()));
+        if (eventUserRequesDto.getLocation() != null) {
+            event.setLocation(getOrSaveLocation(eventUserRequesDto.getLocation()));
         }
 
-        if (updateEventUserRequest.getParticipantLimit() != null) {
-            event.setParticipantLimit(updateEventUserRequest.getParticipantLimit());
+        if (eventUserRequesDto.getParticipantLimit() != null) {
+            event.setParticipantLimit(eventUserRequesDto.getParticipantLimit());
         }
 
-        if (updateEventUserRequest.getPaid() != null) {
-            event.setPaid(updateEventUserRequest.getPaid());
+        if (eventUserRequesDto.getPaid() != null) {
+            event.setPaid(eventUserRequesDto.getPaid());
         }
 
-        if (updateEventUserRequest.getRequestModeration() != null) {
-            event.setRequestModeration(updateEventUserRequest.getRequestModeration());
+        if (eventUserRequesDto.getRequestModeration() != null) {
+            event.setRequestModeration(eventUserRequesDto.getRequestModeration());
         }
 
-        if (updateEventUserRequest.getTitle() != null) {
-            event.setTitle(updateEventUserRequest.getTitle());
+        if (eventUserRequesDto.getTitle() != null) {
+            event.setTitle(eventUserRequesDto.getTitle());
         }
 
-        if (updateEventUserRequest.getStateAction() != null) {
-            if (EventStateAction.SEND_TO_REVIEW.equals(updateEventUserRequest.getStateAction())) {
+        if (eventUserRequesDto.getStateAction() != null) {
+            if (EventStateAction.SEND_TO_REVIEW.equals(eventUserRequesDto.getStateAction())) {
                 event.setState(EventState.PENDING);
-            } else if (EventStateAction.CANCEL_REVIEW.equals(updateEventUserRequest.getStateAction())) {
+            } else if (EventStateAction.CANCEL_REVIEW.equals(eventUserRequesDto.getStateAction())) {
                 event.setState(EventState.CANCELED);
             }
         }
@@ -242,7 +242,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventFullDto pathEventViaAdmin(UpdateEventAdminRequest eventRequest, Long eventId) {
+    public EventFullDto pathEventViaAdmin(EventAdminRequestDto eventRequest, Long eventId) {
         checkNewEventDate(eventRequest.getEventDate(), LocalDateTime.now().plusHours(1));
 
         Event event = getEventById(eventId);
@@ -367,7 +367,7 @@ public class EventServiceImpl implements EventService {
     }
 
 
-    private Predicate makeAdminPredicate(GetEventRequest.AdminRequest req) {
+    private Predicate makeAdminPredicate(EventRequest.AdminRequest req) {
         QEvent event = QEvent.event;
         return QPredicates.build()
                 .add(req.getUsers() != null ? event.initiator.id.in(req.getUsers()) : null)
@@ -379,7 +379,7 @@ public class EventServiceImpl implements EventService {
     }
 
 
-    private Predicate makePublicPredicate(GetEventRequest req) {
+    private Predicate makePublicPredicate(EventRequest req) {
         QEvent entity = QEvent.event;
         return QPredicates.build()
                 .add(entity.state.eq(EventState.PUBLISHED))
