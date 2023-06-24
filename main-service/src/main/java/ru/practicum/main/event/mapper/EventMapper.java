@@ -3,6 +3,7 @@ package ru.practicum.main.event.mapper;
 import lombok.experimental.UtilityClass;
 import ru.practicum.main.category.mapper.CategoryMapper;
 import ru.practicum.main.category.model.Category;
+import ru.practicum.main.event.dto.EventCommentDto;
 import ru.practicum.main.event.dto.EventFullDto;
 import ru.practicum.main.event.dto.EventShortDto;
 import ru.practicum.main.event.dto.NewEventDto;
@@ -45,7 +46,7 @@ public class EventMapper {
                 .description(event.getDescription())
                 .eventDate(event.getEventDate().format(DTFormatter.DATE_TIME_FORMATTER))
                 .id(event.getId())
-                .initiator(UserMapper.tUserShortDto(event.getInitiator()))
+                .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .location(LocationMapper.toLocationDto(event.getLocation()))
                 .paid(event.isPaid())
                 .participantLimit(event.getParticipantLimit())
@@ -67,7 +68,7 @@ public class EventMapper {
                 .description(event.getDescription())
                 .eventDate(event.getEventDate().format(DTFormatter.DATE_TIME_FORMATTER))
                 .id(event.getId())
-                .initiator(UserMapper.tUserShortDto(event.getInitiator()))
+                .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .location(LocationMapper.toLocationDto(event.getLocation()))
                 .paid(event.isPaid())
                 .participantLimit(event.getParticipantLimit())
@@ -90,7 +91,20 @@ public class EventMapper {
                 .category(CategoryMapper.toCategoryDto(event.getCategory()))
                 .confirmedRequests(event.getConfirmedRequests())
                 .views(views)
-                .initiator(UserMapper.tUserShortDto(event.getInitiator()))
+                .initiator(UserMapper.toUserShortDto(event.getInitiator()))
+                .build();
+    }
+
+    public static EventCommentDto toEvenCommentDto(Event event) {
+        return EventCommentDto.builder()
+                .id(event.getId())
+                .eventDate(event.getEventDate().format(DTFormatter.DATE_TIME_FORMATTER))
+                .title(event.getTitle())
+                .paid(event.isPaid())
+                .annotation(event.getAnnotation())
+                .category(CategoryMapper.toCategoryDto(event.getCategory()))
+                .confirmedRequests(event.getConfirmedRequests())
+                .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .build();
     }
 }

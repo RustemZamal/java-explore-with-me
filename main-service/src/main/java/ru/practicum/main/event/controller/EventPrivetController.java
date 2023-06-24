@@ -2,6 +2,7 @@ package ru.practicum.main.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,13 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import ru.practicum.main.event.dto.CommentDto;
+import ru.practicum.main.event.dto.CommentDtoIn;
 import ru.practicum.main.event.dto.EventFullDto;
 import ru.practicum.main.event.dto.EventRequestStatus;
 import ru.practicum.main.event.dto.EventRequestStatusResult;
 import ru.practicum.main.event.dto.EventShortDto;
+import ru.practicum.main.event.dto.EventUserRequestDto;
 import ru.practicum.main.event.dto.NewEventDto;
 import ru.practicum.main.event.dto.ParticipationRequestDto;
-import ru.practicum.main.event.dto.EventUserRequestDto;
+import ru.practicum.main.event.service.CommentService;
 import ru.practicum.main.event.service.EventService;
 import ru.practicum.main.event.service.RequestService;
 import ru.practicum.main.util.OffsetPageRequest;
@@ -34,6 +38,8 @@ public class EventPrivetController {
     private final EventService eventService;
 
     private final RequestService requestService;
+
+    private final CommentService commentService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -78,5 +84,30 @@ public class EventPrivetController {
             @PathVariable Long userId,
             @PathVariable Long eventId) {
         return requestService.patchEventRequestByEventOwner(eventRequestStatus, userId, eventId);
+    }
+
+    @PostMapping("/{eventId}/comments")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentDto postCommentViaPrivet(
+            @RequestBody @Valid CommentDtoIn newCommentDto,
+            @PathVariable Long userId,
+            @PathVariable Long eventId) {
+        return commentService.postCommentViaPrivate(newCommentDto, userId, eventId);
+    }
+
+    @PatchMapping("/{eventId}/comments/{commentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public CommentDto patchCommentViaPrivet(
+            @RequestBody @Valid CommentDtoIn newCommentDto,
+            @PathVariable Long userId,
+            @PathVariable Long eventId,
+            @PathVariable Long commentId) {
+        return commentService.patchCommentViaPrivate(newCommentDto, userId, eventId, commentId);
+    }
+
+    @DeleteMapping("/{eventId}/comments/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCommentViaPrivate(@PathVariable Long userId, @PathVariable Long eventId, @PathVariable Long commentId) {
+        commentService.deleteCommentViaPrivate(userId, eventId, commentId);
     }
 }
