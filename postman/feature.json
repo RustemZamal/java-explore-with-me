@@ -977,8 +977,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {\r",
-									"    pm.response.to.be.clientError;    \r",
+									"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {    \r",
 									"    pm.response.to.be.withBody;\r",
 									"    pm.response.to.be.json;\r",
 									"});\r",
@@ -987,6 +986,9 @@
 									"\r",
 									"pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
 									"    pm.expect(target).to.have.property('status');\r",
+									"});\r",
+									"pm.test(\"Status code is 409\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([409]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1045,8 +1047,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {\r",
-									"    pm.response.to.be.clientError;    \r",
+									"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+									"    pm.response.to.be.notFound;    \r",
 									"    pm.response.to.be.withBody;\r",
 									"    pm.response.to.be.json;\r",
 									"});\r",
@@ -1206,9 +1208,77 @@
 				},
 				{
 					"name": "Invalode range time. Error 409",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {    ",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"const target = pm.response.json();",
+									"",
+									"pm.test(\"Ошибка должна содержать поле: status\", function () {",
+									"    pm.expect(target).to.have.property('status');",
+									"});",
+									"pm.test(\"Status code is 409\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([409]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/:userId/comments?eventId&text=coMmen&rangeStart=2097-09-06%2013%3A30%3A38&rangeEnd=2022-09-06%2013%3A30%3A38&from&size",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								":userId",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "eventId",
+									"value": null
+								},
+								{
+									"key": "text",
+									"value": "coMmen"
+								},
+								{
+									"key": "rangeStart",
+									"value": "2097-09-06%2013%3A30%3A38"
+								},
+								{
+									"key": "rangeEnd",
+									"value": "2022-09-06%2013%3A30%3A38"
+								},
+								{
+									"key": "from",
+									"value": null
+								},
+								{
+									"key": "size",
+									"value": null
+								}
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "1"
+								}
+							]
+						}
 					},
 					"response": []
 				}
@@ -1392,13 +1462,6 @@
 								"comments",
 								":commentId"
 							],
-							"query": [
-								{
-									"key": null,
-									"value": "2",
-									"disabled": true
-								}
-							],
 							"variable": [
 								{
 									"key": "commentId",
@@ -1491,8 +1554,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
-									"    pm.response.to.be.clientError;    \r",
+									"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+									"    pm.response.to.be.notFound;    \r",
 									"    pm.response.to.be.withBody;\r",
 									"    pm.response.to.be.json;\r",
 									"});\r",
@@ -1501,7 +1564,7 @@
 									"\r",
 									"pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
 									"    pm.expect(target).to.have.property('status');\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1513,7 +1576,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"text\": \"\"\r\n}",
+							"raw": "{\r\n  \"text\": \"Comment-1-Admin-Update\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1521,7 +1584,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/admin/comments/:commentId",
+							"raw": "http://localhost:8080/admin/comments/:commentId?eventId=2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1531,6 +1594,12 @@
 								"admin",
 								"comments",
 								":commentId"
+							],
+							"query": [
+								{
+									"key": "eventId",
+									"value": "2"
+								}
 							],
 							"variable": [
 								{
@@ -1598,16 +1667,19 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 200\", function () {\r",
-									"    pm.response.to.be.ok;\r",
-									"});\r",
-									"pm.test(\"Список комментариев в ответе\", function () {\r",
+									"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {    \r",
 									"    pm.response.to.be.withBody;\r",
 									"    pm.response.to.be.json;\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);\r",
 									"});\r",
-									""
+									"\r",
+									"const target = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+									"    pm.expect(target).to.have.property('status');\r",
+									"});\r",
+									"pm.test(\"Status code is 409\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([409]);\r",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -1617,7 +1689,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/admin/comments?eventId=&authorId=1&text=uPdate&rangeStart&rangeEnd&from&size",
+							"raw": "http://localhost:8080/admin/comments?eventId=&authorId=1&text=uPdate&rangeStart=2097-09-06%2013%3A30%3A38&rangeEnd=2022-09-06%2013%3A30%3A38&from&size",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1642,11 +1714,11 @@
 								},
 								{
 									"key": "rangeStart",
-									"value": null
+									"value": "2097-09-06%2013%3A30%3A38"
 								},
 								{
 									"key": "rangeEnd",
-									"value": null
+									"value": "2022-09-06%2013%3A30%3A38"
 								},
 								{
 									"key": "from",
@@ -1692,7 +1764,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/comments?eventId&text&authorName=rosemary&rangeStart&rangeEnd&from&size",
+							"raw": "http://localhost:8080/comments?eventId&text=coMme&authorName=&rangeStart&rangeEnd&from&size",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1708,11 +1780,11 @@
 								},
 								{
 									"key": "text",
-									"value": null
+									"value": "coMme"
 								},
 								{
 									"key": "authorName",
-									"value": "rosemary"
+									"value": ""
 								},
 								{
 									"key": "rangeStart",
@@ -1742,14 +1814,38 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 200\", function () {\r",
-									"    pm.response.to.be.ok;\r",
-									"});\r",
-									"pm.test(\"Список комментариев в ответе\", function () {\r",
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
 									"    pm.response.to.be.withBody;\r",
 									"    pm.response.to.be.json;\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.length, 'List length must be 2').to.eql(2);\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Комментарий должен содержать поля: id, text, created, authorId, eventId, state\", function () {\r",
+									"pm.expect(target).to.have.property('id');\r",
+									"pm.expect(target).to.have.property('text');\r",
+									"pm.expect(target).to.have.property('created');\r",
+									"pm.expect(target).to.have.property('authorId');\r",
+									"pm.expect(target).to.have.property('eventId');\r",
+									"pm.expect(target).to.have.property('state');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Соотвествие id\", function () {\r",
+									"    pm.expect(target.id).to.eql(1);\r",
+									"});\r",
+									"pm.test(\"Соотвествие text\", function () {\r",
+									"    pm.expect(target.text).to.eql(\"Comment-1-Admin-Update\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Соотвествие eventId\", function () {\r",
+									"    pm.expect(target.eventId).to.eql(2);\r",
+									"});\r",
+									"pm.test(\"Соотвествие authorId\", function () {\r",
+									"    pm.expect(target.authorId).to.eql(1);\r",
+									"});\r",
+									"pm.test(\"Соотвествие state\", function () {\r",
+									"    pm.expect(target.state).to.eql(\"EDITED_BY_ADMIN\");\r",
 									"});\r",
 									""
 								],
@@ -1793,16 +1889,19 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 200\", function () {\r",
-									"    pm.response.to.be.ok;\r",
-									"});\r",
-									"pm.test(\"Список комментариев в ответе\", function () {\r",
+									"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {    \r",
 									"    pm.response.to.be.withBody;\r",
 									"    pm.response.to.be.json;\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.length, 'List length must be 2').to.eql(2);\r",
 									"});\r",
-									""
+									"\r",
+									"const target = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+									"    pm.expect(target).to.have.property('status');\r",
+									"});\r",
+									"pm.test(\"Status code is 409\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([409]);\r",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -1812,7 +1911,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/comments?eventId&text&authorName=rosemary&rangeStart&rangeEnd&from&size",
+							"raw": "http://localhost:8080/comments?eventId&text&authorName=rosemary&rangeStart=2097-09-06%2013%3A30%3A38&rangeEnd=2022-09-06%2013%3A30%3A38&from&size",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1836,11 +1935,11 @@
 								},
 								{
 									"key": "rangeStart",
-									"value": null
+									"value": "2097-09-06%2013%3A30%3A38"
 								},
 								{
 									"key": "rangeEnd",
-									"value": null
+									"value": "2022-09-06%2013%3A30%3A38"
 								},
 								{
 									"key": "from",
@@ -1862,16 +1961,17 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 200\", function () {\r",
-									"    pm.response.to.be.ok;\r",
-									"});\r",
-									"pm.test(\"Список комментариев в ответе\", function () {\r",
+									"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+									"    pm.response.to.be.notFound;    \r",
 									"    pm.response.to.be.withBody;\r",
 									"    pm.response.to.be.json;\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.length, 'List length must be 2').to.eql(2);\r",
 									"});\r",
-									""
+									"\r",
+									"const target = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+									"    pm.expect(target).to.have.property('status');\r",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -1894,7 +1994,7 @@
 							"variable": [
 								{
 									"key": "commentId",
-									"value": "1"
+									"value": "999"
 								}
 							]
 						}
