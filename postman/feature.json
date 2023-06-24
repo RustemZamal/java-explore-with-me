@@ -1628,7 +1628,7 @@
 									"\r",
 									"pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
 									"    pm.expect(target).to.have.property('status');\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
 									"});"
 								],
 								"type": "text/javascript"
